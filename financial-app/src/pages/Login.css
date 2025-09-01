@@ -69,3 +69,27 @@
   background-color: #1d4ed8;
   transform: scale(1.02);
 }
+
+/* ✅ Register/Login toggle text */
+.login-register-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* ✅ Toggle button styled like a link */
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.toggle-btn:hover {
+  color: #1d4ed8;
+}
