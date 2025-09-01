@@ -1,0 +1,141 @@
+/* === Page Layout === */
+.home-page {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120px 1rem 2rem; /* space for navbar */
+  background-color: #121212;
+  color: #f1f1f1;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* === Hero Section === */
+.home-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.home-hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-hero p {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  color: #cccccc;
+}
+
+.cta-btn {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+}
+
+/* === Stats Grid === */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background-color: #1e1e1e;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.stat-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #cccccc;
+}
+
+.stat-card.income {
+  border-top: 4px solid #4ade80;
+}
+
+.stat-card.expense {
+  border-top: 4px solid #f87171;
+}
+
+.stat-card.savings {
+  border-top: 4px solid #60a5fa;
+}
+
+/* === Recent Transactions === */
+.recent-transactions {
+  width: 100%;
+  max-width: 700px;
+  background-color: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2rem;
+}
+
+.recent-transactions h2 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.recent-transactions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-transactions li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.recent-transactions li:last-child {
+  border-bottom: none;
+}
+
+.income-text {
+  color: #4ade80;
+}
+
+.expense-text {
+  color: #f87171;
+}
+
+/* === Finance Tip === */
+.finance-tip {
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-style: italic;
+  text-align: center;
+  color: #a0a0a0;
+  max-width: 700px;
+}

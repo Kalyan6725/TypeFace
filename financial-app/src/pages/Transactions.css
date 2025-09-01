@@ -1,0 +1,147 @@
+/* === Page Layout === */
+.transactions-page {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;    
+  align-items: flex-start;
+  padding: 120px 1rem 2rem;    
+  background-color: #121212;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.transactions-container {
+  flex: 0 1 1000px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+  position: relative; /* important for top-right button positioning */
+}
+
+
+/* === Title === */
+.transactions-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* === Form === */
+.transaction-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  background-color: #2a2a2a;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+  margin-bottom: 2rem;
+}
+
+.transaction-form select,
+.transaction-form input {
+  padding: 0.75rem;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #2d2d2d;
+  color: #f1f1f1;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.transaction-form select:focus,
+.transaction-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  background-color: #333;
+}
+
+.transaction-form button {
+  grid-column: span 2;
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.transaction-form button:hover {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  transform: translateY(-1px);
+}
+
+/* === Table === */
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+.transactions-table th {
+  background-color: #333;
+  font-weight: 600;
+  color: #a0a0a0;
+}
+
+.transactions-table tbody tr:nth-child(even) {
+  background-color: #252525;
+}
+
+.transactions-table tbody tr:hover {
+  background-color: #3a3a3a;
+  transition: background 0.2s ease;
+}
+
+.transactions-table tbody tr:last-child td {
+  border-bottom: none;
+}
+/* === Add Transaction Button === */
+/* === Add Transaction Button (Top-Right Corner) === */
+.add-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.15s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  z-index: 10; /* ensures it's above content */
+}
+
+.add-btn:hover {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  transform: translateY(-2px);
+}
+
+.add-btn:active {
+  transform: translateY(1px);
+}
+
