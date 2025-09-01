@@ -145,3 +145,12 @@
   transform: translateY(1px);
 }
 
+.income-text {
+  color: #4caf50; /* green */
+  font-weight: bold;
+}
+
+.expense-text {
+  color: #f44336; /* red */
+  font-weight: bold;
+}

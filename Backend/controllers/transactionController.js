@@ -2,16 +2,23 @@ import Transaction from "../models/Transaction.js";
 import fs from "fs";
 import Papa from "papaparse";
 
+// ✅ Create single transaction
 export const createTransaction = async (req, res) => {
   try {
     const { type, category, amount, date } = req.body;
+
+    // Normalize amount before saving
+    const normalizedAmount =
+      type === "Income" ? Math.abs(amount) : -Math.abs(amount);
+
     const transaction = new Transaction({
       userId: req.user.id,
       type,
       category,
-      amount,
-      date
+      amount: normalizedAmount,
+      date,
     });
+
     await transaction.save();
     res.status(201).json(transaction);
   } catch (err) {
@@ -19,6 +26,7 @@ export const createTransaction = async (req, res) => {
   }
 };
 
+// ✅ Fetch all user transactions
 export const getTransactions = async (req, res) => {
   try {
     const transactions = await Transaction.find({ userId: req.user.id });
@@ -28,6 +36,7 @@ export const getTransactions = async (req, res) => {
   }
 };
 
+// ✅ Delete transaction
 export const deleteTransaction = async (req, res) => {
   try {
     await Transaction.findByIdAndDelete(req.params.id);
@@ -37,31 +46,32 @@ export const deleteTransaction = async (req, res) => {
   }
 };
 
+// ✅ Bulk upload transactions from CSV
 export const bulkUploadTransactions = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
-    console.log(JSON.stringify(req.body.transactions));
-     const filePath = req.file.path;
+
+    const filePath = req.file.path;
     const fileContent = fs.readFileSync(filePath, "utf8");
+
     Papa.parse(fileContent, {
       header: true,
       complete: async (results) => {
         const rows = results.data
           .filter((r) => r.Amount)
-          .map((r) => ({  
-          date: r.Date,
-          description: r.Description,
-          amount: parseFloat(r.Amount),
-          category: r.Category,
-          type: parseFloat(r.Amount) >= 0 ? "income" : "expense", // derive from amount
-          userId: req.user._id, // make sure authMiddleware attaches user
-        }));
+          .map((r) => {
+            const amt = parseFloat(r.Amount);
+            return {
+              date: r.Date,
+              description: r.Description,
+              category: r.Category,
+              type: amt >= 0 ? "Income" : "Expense",
+              amount: amt >= 0 ? Math.abs(amt) : -Math.abs(amt), // ✅ normalize
+              userId: req.user.id,
+            };
+          });
 
-        console.log("Raw data:", results.data);  
-        console.log("Parsed transactions:", rows);
-
-        // Example DB insert:
-        await Transaction.insertMany(rows.map(r => ({ ...r, userId: req.user.id })));
+        await Transaction.insertMany(rows);
 
         res.status(200).json({
           message: "CSV processed successfully",
@@ -73,7 +83,7 @@ export const bulkUploadTransactions = async (req, res) => {
         res.status(500).json({ message: "CSV parsing failed" });
       },
     });
-  }catch (err) {
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };

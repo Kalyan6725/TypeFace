@@ -4,7 +4,7 @@ import "./Transactions.css";
 
 export default function Transactions() {
   const [transactions, setTransactions] = useState([]);
-  const [showForm, setShowForm] = useState(false); // ✅ toggle form
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     type: "Expense",
     category: "",
@@ -12,7 +12,7 @@ export default function Transactions() {
     date: "",
   });
 
-  // Fetch transactions
+  // ✅ Fetch transactions
   useEffect(() => {
     API.get("/transactions")
       .then((res) => setTransactions(res.data))
@@ -21,19 +21,25 @@ export default function Transactions() {
       );
   }, []);
 
-  // Handle form input change
+  // ✅ Handle form input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Submit new transaction
+  // ✅ Submit new transaction
   const handleSubmit = (e) => {
     e.preventDefault();
-    API.post("/transactions", formData)
+
+    const normalizedData = {
+      ...formData,
+      amount: Number(formData.amount), // let backend decide sign
+    };
+
+    API.post("/transactions", normalizedData)
       .then((res) => {
         setTransactions([...transactions, res.data]);
         setFormData({ type: "Expense", category: "", amount: "", date: "" });
-        setShowForm(false); // ✅ hide form after adding
+        setShowForm(false);
       })
       .catch((err) =>
         console.error(err.response?.data?.message || "Error adding transaction")
@@ -109,8 +115,10 @@ export default function Transactions() {
                 <td>{new Date(t.date).toLocaleDateString()}</td>
                 <td>{t.type}</td>
                 <td>{t.category}</td>
-                <td className={t.type === "Income" ? "income-text" : "expense-text"}>
-                  {t.type === "Income" ? "+" : "-"}₹{t.amount}
+                <td className={t.amount >= 0 ? "income-text" : "expense-text"}>
+                  {t.amount >= 0
+                    ? `+₹${t.amount}`
+                    : `-₹${Math.abs(t.amount)}`}
                 </td>
               </tr>
             ))}
