@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import API from "../api/axios";
 import Tesseract from "tesseract.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Upload.css";
 
 export default function Upload() {
@@ -11,11 +13,13 @@ export default function Upload() {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setOcrText("");
-    // console.log(e.target.files[0].name.split(".").pop().toLowerCase());
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file first!");
+    if (!file) {
+      toast.error("Please select a file first!");
+      return;
+    }
 
     const ext = file.name.split(".").pop().toLowerCase();
     setLoading(true);
@@ -27,36 +31,34 @@ export default function Upload() {
         const text = data.text;
         setOcrText(text);
 
-        // TODO: Parse text into transaction fields (simple demo parsing)
         const transaction = {
           description: "Scanned Receipt",
-          amount: extractAmount(text), // helper below
+          amount: extractAmount(text),
           type: text.toLowerCase().includes("income") ? "income" : "expense",
           date: new Date().toISOString().split("T")[0],
         };
 
-        await API.post("/transactions", transaction);
-        alert("Transaction saved from OCR!");
+        await API.post("/transactions", transaction, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+
+        toast.success("✅ Transaction saved from OCR!");
       } else if (ext === "csv") {
         // === Handle CSV ===
         const formData = new FormData();
-        formData.append("file",file);
-        try{
-          await API.post("/transactions/bulk",formData,{
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-          });
-          alert("CSV file uploaded successfully");
-          // console.log("CSV file uploaded successfully");
-        }catch(err){
-          console.error("Error uploading CSV file:", err);
-          alert(err.response?.data?.message || "CSV upload failed")
-        }
+        formData.append("file", file);
+
+        await API.post("/transactions/bulk", formData, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+
+        toast.success("📂 CSV file uploaded successfully!");
       } else {
-        alert("Unsupported file type. Use PNG, JPG, JPEG, or CSV.");
+        toast.warn("⚠️ Unsupported file type. Use PNG, JPG, JPEG, or CSV.");
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Upload failed");
+      toast.error(err.response?.data?.message || "❌ Upload failed");
     } finally {
       setLoading(false);
     }
@@ -86,6 +88,9 @@ export default function Upload() {
           </div>
         )}
       </div>
+
+      {/* Toastify Container */}
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
     </div>
   );
 }

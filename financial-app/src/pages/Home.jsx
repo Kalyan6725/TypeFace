@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaMoneyBillWave, FaHandHoldingUsd, FaPiggyBank } from "react-icons/fa";
+import { MdTrendingUp, MdTrendingDown } from "react-icons/md";
 import API from "../api/axios";
 import "./Home.css";
 
@@ -47,31 +49,31 @@ export default function Home() {
       );
   }, []);
 
-  const savings = totals.income - totals.expense;
+  const savings = totals.income + totals.expense;
 
   return (
     <div className="home-page">
       {/* === Hero Section === */}
       <div className="home-hero">
-        <h1>Take Control of Your Finances 💼</h1>
+        <h1>Take Control of Your Finances <FaMoneyBillWave /></h1>
         <p>Track. Analyze. Grow.</p>
         <button className="cta-btn" onClick={() => navigate("/transactions")}>
-          ➕ Add Transaction
+          <FaHandHoldingUsd style={{ marginRight: 8 }} /> Add Transaction
         </button>
       </div>
 
       {/* === Stats Grid === */}
       <div className="stats-grid">
         <div className="stat-card income">
-          <h3>💰 Income</h3>
+          <h3><MdTrendingUp /> Income</h3>
           <p>₹{totals.income.toLocaleString()}</p>
         </div>
         <div className="stat-card expense">
-          <h3>💸 Expenses</h3>
+          <h3><MdTrendingDown /> Expenses</h3>
           <p>₹{totals.expense.toLocaleString()}</p>
         </div>
         <div className="stat-card savings">
-          <h3>📊 Savings</h3>
+          <h3><FaPiggyBank /> Savings</h3>
           <p>₹{savings.toLocaleString()}</p>
         </div>
       </div>
@@ -86,7 +88,9 @@ export default function Home() {
               <span
                 className={t.type === "income" ? "income-text" : "expense-text"}
               >
-                {t.type === "income" ? "+" : "-"}₹{t.amount}
+                {t.type === "income"
+                  ? <><MdTrendingUp /> +₹{t.amount}</>
+                  : <><MdTrendingDown /> -₹{Math.abs(t.amount)}</>}
               </span>
             </li>
           ))}

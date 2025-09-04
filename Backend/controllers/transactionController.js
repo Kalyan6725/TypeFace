@@ -46,6 +46,36 @@ export const deleteTransaction = async (req, res) => {
   }
 };
 
+// ✅ Update transaction
+export const updateTransaction = async (req, res) => {
+  try {
+    const { type, category, amount, date } = req.body;
+
+    // normalize amount again
+    const normalizedAmount =
+      type === "Income" ? Math.abs(amount) : -Math.abs(amount);
+
+    const updatedTransaction = await Transaction.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user.id }, // ensure user owns it
+      {
+        type,
+        category,
+        amount: normalizedAmount,
+        date,
+      },
+      { new: true } // return updated document
+    );
+
+    if (!updatedTransaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    res.json(updatedTransaction);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // ✅ Bulk upload transactions from CSV
 export const bulkUploadTransactions = async (req, res) => {
   try {
